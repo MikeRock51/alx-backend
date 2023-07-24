@@ -45,7 +45,6 @@ class Server:
 
         return self.__dataset
 
-
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Performs a simple pagination"""
         assert type(page) == int and page > 0
@@ -53,7 +52,7 @@ class Server:
 
         startIndex, endIndex = index_range(page, page_size)
 
-        print(self.dataset()[startIndex:endIndex])
+        return self.dataset()[startIndex:endIndex]
 
 
 Server().get_page(1, 3)
