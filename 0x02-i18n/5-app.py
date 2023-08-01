@@ -34,7 +34,10 @@ users = {
 
 def get_user() -> Dict:
     """Returns the user with the id or None"""
-    id = int(request.args.get('login_as'))
+    try:
+        id = int(request.args.get('login_as'))
+    except Exception:
+        return None
 
     if id and id in users:
         return users[id]
