@@ -9,10 +9,12 @@
 from flask import Flask, render_template, request
 from flask_babel import Babel
 import pytz
+from config import Config
 
 
 app = Flask(__name__)
 babel = Babel(app)
+app.config.from_object(Config)
 
 
 @app.before_request
@@ -28,4 +30,4 @@ def welcome():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

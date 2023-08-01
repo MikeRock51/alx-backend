@@ -3,5 +3,7 @@
 
 
 class Config:
-    """Defines the supported laguges"""
+    """Configuration for the application"""
     LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
