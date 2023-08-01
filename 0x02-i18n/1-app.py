@@ -8,12 +8,21 @@
 
 from flask import Flask, render_template, request
 from flask_babel import Babel
-#from config import Config
+# from config import Config
 
 
 app = Flask(__name__)
 babel = Babel(app)
-#app.config.from_object(Config)
+
+
+class Config:
+    """Configuration for the application"""
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
+
+
+app.config.from_object(Config)
 
 
 @app.route('/')
