@@ -7,4 +7,4 @@ from flask import request
 @babel.localeselector
 def get_locale():
     """Sets the default locale language to english"""
-        return 'en'
+    return 'en'
