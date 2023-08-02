@@ -49,9 +49,7 @@ def get_user() -> Dict:
 def before_request():
     """Finds a user, if any"""
     user = get_user()
-
-    if user:
-        g.user = user
+    g.user = user
 
 
 @babel.localeselector
