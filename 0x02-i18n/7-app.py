@@ -73,15 +73,18 @@ def get_timezone():
     timezone = request.args.get('timezone')
     if timezone and timezone in pytz.all_timezones:
         return timezone
-    elif g.user and g.user.get('timezone'):
-        return g.user['timezone']
+    elif g.user:
+        timezone = g.user.get('timezone')
+        if timezone in pytz.all_timezones:
+            return g.user['timezone']
 
-    return app.config['UTC']
+    return 'UTC'
 
 
 @app.route('/')
 def welcome():
     """Returns the index page"""
+    print(get_timezone())
     return render_template('7-index.html')
 
 
