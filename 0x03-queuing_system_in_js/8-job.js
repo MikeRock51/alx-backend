@@ -4,9 +4,10 @@ function createPushNotificationsJobs(jobs, queue) {
     }
 
     jobs.forEach((job) => {
-        const newJob = queue.create('push_notification_code_3', job).save((error) => {
+        const newJob = queue.create('push_notification_code_3', job)
+        newJob.save((error) => {
             !error && console.log(`Notification job created: ${newJob.id}`);
-        })
+        });
         newJob.on('completed', () => {
             console.log(`Notification job ${newJob.id} completed`);
         }).on('failed', (error) => {
