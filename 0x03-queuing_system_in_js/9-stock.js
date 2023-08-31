@@ -1,5 +1,6 @@
-const express = require("express");
-import { createClient } from "redis";
+import express from 'express';
+import { createClient } from 'redis';
+import { promisify } from 'util';
 
 const app = express();
 const port = 1245;
@@ -52,16 +53,17 @@ function reserveStockById(itemId, stock) {
 }
 
 async function getCurrentReservedStockById(itemId) {
-  return await client.get(`item.${itemId}`);
+  const get = promisify(client.hget).bind(client);
+  return await get('item', itemId);
 }
 
 app.get("/list_products", (req, res) => {
   res.send(listProducts);
 });
 
-app.get('/list_products/:itemId', (req, res) => {
+app.get('/list_products/:itemId', async (req, res) => {
   const id = req.params.itemId;
-  const stock = getCurrentReservedStockById(id);
+  const stock = await getCurrentReservedStockById(id);
   !stock ? res.send({"status":"Product not found"})
   : res.send(stock);
 });
