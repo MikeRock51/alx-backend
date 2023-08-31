@@ -1,13 +1,3 @@
-import kue from "kue";
+import getItemById from "./9-stock";
 
-import createPushNotificationsJobs from "./8-job.js";
-
-const queue = kue.createQueue();
-
-const list = [
-  {
-    phoneNumber: "4153518780",
-    message: "This is the code 1234 to verify your account",
-  },
-];
-createPushNotificationsJobs(list, queue);
+console.log(getItemById(1));

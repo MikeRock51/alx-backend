@@ -1,6 +1,6 @@
-import express from 'express';
-import { createClient } from 'redis';
-import { promisify } from 'util';
+import express from "express";
+import { createClient } from "redis";
+import { promisify } from "util";
 
 const app = express();
 const port = 1245;
@@ -46,28 +46,36 @@ function getItemById(id) {
 }
 
 function reserveStockById(itemId, stock) {
-  client.set(`item.${itemId}`, stock, (error, reply) => {
-    error && console.log(`Error: ${error}`);
-    value && console.log(value);
-  });
+  client.hset('item', itemId, stock);
 }
 
 async function getCurrentReservedStockById(itemId) {
   const get = promisify(client.hget).bind(client);
-  return await get('item', itemId);
+  return await get("item", itemId);
 }
 
 app.get("/list_products", (req, res) => {
   res.send(listProducts);
 });
 
-app.get('/list_products/:itemId', async (req, res) => {
+app.get("/list_products/:itemId", async (req, res) => {
   const id = req.params.itemId;
   const stock = await getCurrentReservedStockById(id);
-  !stock ? res.send({"status":"Product not found"})
-  : res.send(stock);
+  !stock ? res.send({ status: "Product not found" }) : res.send(stock);
+});
+
+app.get("/reserve_product/:itemId", (req, res) => {
+  const itemId = req.params.itemId;
+  const product = getItemById(itemId);
+  !product && res.send({ status: "Product not found" });
+  product['stock'] < 1 &&
+    res.send({ status: "Not enough stock available", itemId: itemId });
+  reserveStockById(itemId, product['stock']);
+  res.send({ status: "Reservation confirmed", itemId: itemId });
 });
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
+
+export default getItemById;
